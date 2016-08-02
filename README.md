@@ -21,7 +21,10 @@ Now use torch-rnn to train the neural net. I used a (docker image)[https://githu
 Preprocess the trump.txt file using something that looks like this:
 
 > python scripts/preprocess.py \
->  --input_txt /bschneeman/projects/github.com/trump-rnn/trump.txt \
->  --output_h5 /bschneeman/projects/github.com/trump-rnn/trump.h5 \
+
+>  --input_txt /bschneeman/projects/github.com/trump-rnn/trump.txt \  
+
+>  --output_h5 /bschneeman/projects/github.com/trump-rnn/trump.h5 \  
+
 >  --output_json /bschneeman/projects/github.com/trump-rnn/trump.json
 
