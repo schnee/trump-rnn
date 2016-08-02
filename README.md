@@ -21,7 +21,24 @@ Now use torch-rnn to train the neural net. I used a (docker image)[https://githu
 Preprocess the trump.txt file using something that looks like this:
 
 > python scripts/preprocess.py \
->>  --input_txt /bschneeman/projects/github.com/trump-rnn/trump.txt \  
->>  --output_h5 /bschneeman/projects/github.com/trump-rnn/trump.h5 \  
->>  --output_json /bschneeman/projects/github.com/trump-rnn/trump.json
+>  --input_txt /bschneeman/projects/github.com/trump-rnn/trump.txt \  
+>  --output_h5 /bschneeman/projects/github.com/trump-rnn/trump.h5 \  
+>  --output_json /bschneeman/projects/github.com/trump-rnn/trump.json
 
+Train the model using something like this:
+
+> th train.lua -gpu -1 -input_h5 /bschneeman/projects/github.com/trump-rnn/trump.h5 \
+>  -input_json /bschneeman/projects/github.com/trump-rnn/trump.json \
+>  -checkpoint_name /bschneeman/projects/github.com/trump-rnn/cv/checkpoint \
+>  -num_layers 3 \
+>  -rnn_size 256
+
+If you can do this with a GPU array, that would be best.
+
+Generate tweets with something like this:
+
+> th sample.lua -length 140 -gpu -1  -verbose 1 \ 
+>   -checkpoint /bschneeman/projects/github.com/trump-rnn/cv/checkpoint_1000.t7 \
+>   -start_text "#IHaveTheBestNeurons" 
+
+If you want, this repo has "trump-20160802.t7" in it. So you can generate tweets by referencing that checkpoint file in the command above.
