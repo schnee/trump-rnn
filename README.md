@@ -1,8 +1,9 @@
-# trump-rnn - Making Neural Nets Great Again!
+# trump-rnn - Make Neural Nets Great Again!
 ---
 
-> #TrumpPence16  
-> #Jebly #PresidentTrump #ImWithYou #VoteDo President  
+
+> \#TrumpPence16  
+> \#Jebly #PresidentTrump #ImWithYou #VoteDo President  
 > @piersmissen: So far the truth get @realDonaldTrump like your teams
 
 *seeded with "#TrumpPence16", 5 layer, 512 node neural net*
