@@ -45,6 +45,10 @@ trumpDF <- trumpDF %>% arrange(desc(created))
 
 trumpDF %>%  write_csv(path=allTrumpFile)
 
+# filter to just the tweets post candidacy (>2015-06-14) (he announced on 2015-06-15)
+
+trumpDF <- trumpDF %>% filter(created > "2015-06-14")
+
 # attempt to clean up the tweets a bit
 ## whack the emojis
 trumpDF$txtClean <- iconv(trumpDF$text, from="utf-8", to="ASCII", sub="")
