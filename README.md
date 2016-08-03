@@ -1,5 +1,6 @@
-# trump-rnn - Making Neural Nets Great Again!
+# trump-rnn - Make Neural Nets Great Again!
 ---
+
 
 > #TrumpPence16  
 > #Jebly #PresidentTrump #ImWithYou #VoteDo President  
