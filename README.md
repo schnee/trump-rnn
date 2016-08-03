@@ -1,7 +1,6 @@
 # trump-rnn - Make Neural Nets Great Again!
 ---
 
-
 > \#TrumpPence16  
 > \#Jebly #PresidentTrump #ImWithYou #VoteDo President  
 > @piersmissen: So far the truth get @realDonaldTrump like your teams
