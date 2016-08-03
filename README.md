@@ -1,5 +1,12 @@
 # trump-rnn - Making Neural Nets Great Again!
 ---
+
+> #TrumpPence16  
+> #Jebly #PresidentTrump #ImWithYou #VoteDo President  
+> @piersmissen: So far the truth get @realDonaldTrump like your teams
+
+*seeded with "#TrumpPence16", 5 layer, 512 node neural net*
+
 Inspired by [the Obama speech generator](https://medium.com/@samim/obama-rnn-machine-generated-political-speeches-c8abd18a2ea0#.3and4fbdf), I decided to try to generate political tweets. And since, really, only one candidate has the best tweets, I trained the neural net on [realDonaldTrump](https://twitter.com/realDonaldTrump)'s tweets. Someday, you may see these via [TrumpRnn](https://twitter.com/TrumpRnn).
 
 h/t to https://github.com/samim23/obama-rnn/, https://github.com/jcjohnson/torch-rnn, https://github.com/crisbal/docker-torch-rnn, and https://github.com/sashaperigo/Trump-Tweets. 
