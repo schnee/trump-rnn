@@ -54,12 +54,12 @@ trumpDF <- trumpDF %>% filter(created > "2015-06-14")
 trumpDF$txtClean <- iconv(trumpDF$text, from="utf-8", to="ASCII", sub="")
 ## embedded quotes
 trumpDF$txtClean <- str_replace_all(trumpDF$txtClean,'\"','')
+## strip URLs
+trumpDF$txtClean <- str_replace_all(trumpDF$txtClean, "(http|ftp|https):/{2}[!:?#&=_0-9A-Za-z\\./\\-]+", " ")
 ## multi-line twweets tend to look bad on output
 trumpDF$txtClean <- gsub('\n',' ',trumpDF$txtClean)
 ## HTML encodings...
 trumpDF$txtClean <- gsub("&amp;", ' ', trumpDF$txtClean)
-## strip URLs
-trumpDF$txtClean <- str_replace_all(trumpDF$txtClean, "(http|ftp|https):/{2}[?#&=_0-9A-Za-z\\./\\-]+", " ")
 ## remove orphaned schemes (prob could be worked into the above regex)
 trumpDF$txtClean <- str_replace_all(trumpDF$txtClean, "(http|ftp|https)[:/]{0,3}", " ")
 ## remove pic.twitter.coms too
