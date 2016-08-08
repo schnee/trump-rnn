@@ -67,3 +67,4 @@ trumpDF$txtClean <- str_replace_all(trumpDF$txtClean, "pic.twitter.com[0-9A-Za-z
 
 # now we have only the best tweets with the best characters.
 write(x = trumpDF$txtClean, file="trump.txt")
+
