@@ -30,6 +30,8 @@ alphabet <- text %>%
   unique() %>%
   sort()
 
+saveRDS(alphabet, file = "alphabet.RDS")
+
 print(sprintf("Total characters: %d", length(alphabet)))
 
 
