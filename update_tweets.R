@@ -19,7 +19,8 @@ timeline <-
 
 if (nrow(timeline) > 0) {
   trump_df <- trump_df %>%
-    bind_rows(timeline %>% select(colnames(trump_df)))
+    bind_rows(timeline %>% select(colnames(trump_df))) %>%
+    distinct(status_id, .keep_all = TRUE)
 }
 
 write_csv(trump_df, "./data/trump_df.csv")
