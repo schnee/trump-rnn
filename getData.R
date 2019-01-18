@@ -17,6 +17,8 @@ zipped_json_to_df <- function(url) {
 }
 
 trump_df <- map_df(urltxt, .f=zipped_json_to_df) %>% 
-  mutate(created_at = parse_date_time(created_at, orders="%a %b! %d! %H!:%M!:S! %z!* Y!"))
+  mutate(created_at = parse_date_time(created_at, orders="%a %b! %d! %H!:%M!:S! %z!* Y!")) %>%
+  rename(status_id = id_str) %>%
+  rename(reply_to_user_id = in_reply_to_user_id_str)
 
 write_csv(trump_df, "./data/trump_df.csv")

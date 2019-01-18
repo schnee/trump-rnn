@@ -32,7 +32,7 @@ if(nrow(the_unreplied_tweets) > 0) {
   tweet_prefix <- paste0(".@",handle, ":")
   
   model <- load_model_hdf5("./trumprnn.h5")
-  alphabet <- readRDS(file = "alphabet.RDS")
+  alphabet <- readRDS(file = "./alphabet.RDS")
   
   the_reply <- generate_phrase(model = model, 
                                seedtext = reply_to_txt %>% clean_and_tokenize(),
