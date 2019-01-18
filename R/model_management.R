@@ -3,6 +3,10 @@ library(tidyverse)
 library(tokenizers)
 library(lubridate)
 
+get_max_length <- function() {
+  max_length <- 40
+}
+
 #' clean_and_tokenize
 #'
 #' @param df 
@@ -72,12 +76,13 @@ get_vectors <- function(text, alphabet, max_length) {
 #' @examples
 create_model <- function(chars, max_length){
   keras_model_sequential() %>%
-    bidirectional(layer_cudnn_lstm(units=128, input_shape = c(max_length, length(chars)))) %>%
+    bidirectional(layer_cudnn_lstm(units=256, input_shape = c(max_length, length(chars)))) %>%
+    layer_dropout(rate = 0.3) %>%
     layer_dense(length(chars)) %>%
     layer_activation("softmax") %>%
     compile(
       loss = "categorical_crossentropy",
-      optimizer = optimizer_rmsprop(lr = 0.01)
+      optimizer = optimizer_adam(lr = 0.001)
     )
 }
 
@@ -91,12 +96,13 @@ create_model <- function(chars, max_length){
 #' @export
 #'
 #' @examples
-fit_model <- function(model, vectors, epochs = 1){
+fit_model <- function(model, vectors, epochs = 1, view_metrics = FALSE){
   model %>% fit(
     vectors$x, vectors$y,
-    batch_size = 128,
+    batch_size = 32,
     epochs = epochs,
-    view_metrics = TRUE
+    validation_split= 0.1,
+    view_metrics = view_metrics
   )
 }
 

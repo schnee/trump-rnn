@@ -5,16 +5,9 @@ library(lubridate)
 
 devtools::load_all()
 
-max_length <- 40
-
-# text <- austen_books() %>%
-#   filter(book == "Pride & Prejudice") %>%
-#   pull(text) %>%
-#   str_c(collapse = " ") %>%
-#   tokenize_characters(lowercase = FALSE, strip_non_alphanum = FALSE, simplify = TRUE)
+max_length <- get_max_length()
 
 trump_df <- read_csv("./data/trump_df.csv")
-
 
 text <- trump_df %>% 
   filter(!is_retweet) %>% 
@@ -34,12 +27,11 @@ saveRDS(alphabet, file = "alphabet.RDS")
 
 print(sprintf("Total characters: %d", length(alphabet)))
 
-
 vectors <- get_vectors(text, alphabet, max_length)
 
 model <- create_model(alphabet, max_length)
 
-model_history <- fit_model(model, vectors, epochs = 1)
+model_history <- fit_model(model, vectors, epochs = 40, view_metrics = TRUE)
 
 model %>% save_model_hdf5("./trumprnn.h5")
 
