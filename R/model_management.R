@@ -77,7 +77,7 @@ get_vectors <- function(text, alphabet, max_length) {
 create_model <- function(chars, max_length){
   keras_model_sequential() %>%
     bidirectional(layer_cudnn_lstm(units=256, input_shape = c(max_length, length(chars)))) %>%
-    layer_dropout(rate = 0.3) %>%
+    layer_dropout(rate = 0.5) %>%
     layer_dense(length(chars)) %>%
     layer_activation("softmax") %>%
     compile(
