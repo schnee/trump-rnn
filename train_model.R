@@ -13,7 +13,6 @@ text <- trump_df %>%
   filter(!is_retweet) %>% 
   arrange(created_at) %>%
   top_n(3300, created_at) %>%
-  ## whack the emojis
   clean_and_tokenize()
 
 
@@ -42,3 +41,5 @@ generate_phrase(model, trump_df %>%
                   clean_and_tokenize(), alphabet, max_length, 230, 0.5)
 
 plot(model_history)
+
+saveRDS(model_history, "model_history.RDS")
