@@ -102,7 +102,7 @@ fit_model <- function(model, vectors, epochs = 1, view_metrics = FALSE){
     batch_size = 32,
     epochs = epochs,
     validation_split= 0.1,
-    callbacks = list(callback_early_stopping(patience= 4)),
+    #callbacks = list(callback_early_stopping(patience= 4)),
     view_metrics = view_metrics
   )
 }

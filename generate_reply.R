@@ -27,13 +27,17 @@ the_unreplied_tweets <- trump_df %>% filter(!is_retweet) %>%
 
 if(nrow(the_unreplied_tweets) > 0) {
   reply_to_status_id <- the_unreplied_tweets %>% top_n(n=1, wt = created_at) %>% pull(status_id)
-  reply_to_txt <- the_unreplied_tweets %>% top_n(n=1, wt = created_at)
+  
+  # TODO - ensure that the reply to text has enough characters
+  
+  reply_to_txt <- trump_df %>% top_n(n=5, wt = created_at)
   
   tweet_prefix <- paste0(".@",handle, ":")
   
   model <- load_model_hdf5("./trumprnn.h5")
   alphabet <- readRDS(file = "./alphabet.RDS")
   
+ 
   the_reply <- generate_phrase(model = model, 
                                seedtext = reply_to_txt %>% clean_and_tokenize(),
                                chars = alphabet, 
