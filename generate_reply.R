@@ -28,26 +28,38 @@ the_unreplied_tweets <- trump_df %>% filter(!is_retweet) %>%
 if(nrow(the_unreplied_tweets) > 0) {
   reply_to_status_id <- the_unreplied_tweets %>% top_n(n=1, wt = created_at) %>% pull(status_id)
   
-  # TODO - ensure that the reply to text has enough characters
+  num_reply_chars <- 0
+  n_tweets <- 1
   
-  reply_to_txt <- trump_df %>% top_n(n=5, wt = created_at)
+  while (((num_reply_chars < max_length) && n_tweets <= 10)) {
+    reply_to_txt <- trump_df %>% top_n(n = n_tweets, wt = created_at)
+    
+    reply_chars <- reply_to_txt %>% clean_and_tokenize()
+    
+    num_reply_chars <- length(reply_chars)
+    n_tweets <- n_tweets + 1
+    
+  }
   
-  tweet_prefix <- paste0(".@",handle, ":")
-  
-  model <- load_model_hdf5("./trumprnn.h5")
-  alphabet <- readRDS(file = "./alphabet.RDS")
-  
- 
-  the_reply <- generate_phrase(model = model, 
-                               seedtext = reply_to_txt %>% clean_and_tokenize(),
-                               chars = alphabet, 
-                               max_length = get_max_length(),
-                               output_size = 230 - nchar(tweet_prefix),
-                               diversity = 0.4
-                               )
-  
-  the_reply <- paste(tweet_prefix, the_reply)
-  
-  post_tweet(status = the_reply, in_reply_to_status_id = reply_to_status_id)
+  if (num_reply_chars >= max_length) {
+    tweet_prefix <- paste0(".@", handle, ":")
+    
+    model <- load_model_hdf5("./trumprnn.h5")
+    alphabet <- readRDS(file = "./alphabet.RDS")
+    
+    
+    the_reply <- generate_phrase(
+      model = model,
+      seedtext = reply_chars,
+      chars = alphabet,
+      max_length = get_max_length(),
+      output_size = 230 - nchar(tweet_prefix),
+      diversity = 0.4
+    )
+    
+    the_reply <- paste(tweet_prefix, the_reply)
+    
+    post_tweet(status = the_reply, in_reply_to_status_id = reply_to_status_id)
+  } 
   
 }
