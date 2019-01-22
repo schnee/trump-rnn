@@ -4,7 +4,7 @@ library(tokenizers)
 library(lubridate)
 library(ggplot2)
 
-devtools::load_all()
+devtools::load_all("./packages/tweetlstm/")
 
 max_length <- get_max_length()
 

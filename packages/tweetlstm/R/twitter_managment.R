@@ -2,13 +2,7 @@ library(rtweet)
 library(readr)
 library(dplyr)
 
-initialize_twitter <- function() {
-  credsFile <- "creds.csv"
-  if (file.exists(credsFile)) {
-    creds <- read_csv(credsFile)
-  } else {
-    stop("Need credentials")
-  }
+initialize_twitter <- function(creds) {
   
   token <- create_token(
     app = "magadlibs",

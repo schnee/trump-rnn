@@ -4,9 +4,16 @@ library(dplyr)
 
 handle <- "realDonaldTrump"
 
-devtools::load_all()
+devtools::load_all("./packages/tweetlstm/")
 
-token <- initialize_twitter()
+credsFile <- "creds.csv"
+if (file.exists(credsFile)) {
+  creds <- read_csv(credsFile)
+} else {
+  stop("Need credentials")
+}
+
+token <- initialize_twitter(creds)
 
 trump_df <- read_csv("./data/trump_df.csv") %>%
   mutate(status_id = as.character(status_id)) %>%
