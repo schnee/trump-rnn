@@ -39,7 +39,14 @@ model %>% save_model_hdf5("./trumprnn.h5")
 
 model <- load_model_hdf5("./trumprnn.h5")
 
-generate_phrase(model, trump_df %>% 
-                  top_n(n = 5, wt = created_at) %>% 
-                  clean_and_tokenize(), alphabet, max_length, 230, 0.5)
+generate_phrase(
+  model,
+  trump_df %>%
+    top_n(n = 5, wt = created_at) %>%
+    clean_and_tokenize(),
+  alphabet,
+  max_length,
+  230,
+  0.5
+)
 

@@ -7,6 +7,8 @@ handle <- "realDonaldTrump"
 
 devtools::load_all("./packages/tweetlstm/")
 
+max_length <- get_max_length()
+
 credsFile <- "creds.csv"
 if (file.exists(credsFile)) {
   creds <- read_csv(credsFile)

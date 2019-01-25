@@ -5,6 +5,7 @@ library(lubridate)
 
 get_max_length <- function() {
   max_length <- 40
+  max_length
 }
 
 #' clean_and_tokenize
