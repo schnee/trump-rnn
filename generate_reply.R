@@ -51,7 +51,7 @@ if(nrow(the_unreplied_tweets) > 0) {
   }
   
   if (num_reply_chars >= max_length) {
-    tweet_prefix <- paste0(".@", handle, ":")
+    tweet_prefix <- paste0(".@", handle, " :")
     
     model <- load_model_hdf5("./trumprnn.h5")
     alphabet <- readRDS(file = "./alphabet.RDS")
