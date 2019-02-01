@@ -69,7 +69,7 @@ if(nrow(the_unreplied_tweets) > 0) {
     the_reply <- paste(tweet_prefix, the_reply)
     
     post_tweet(status = the_reply, 
-               in_reply_to_status_id = as.double(reply_to_status_id))
+               in_reply_to_status_id = as.numeric(reply_to_status_id))
   } 
   
 }
