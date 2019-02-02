@@ -19,7 +19,7 @@ if (file.exists(credsFile)) {
 token <- initialize_twitter(creds)
 
 my_replies <- get_timeline(rtweet:::home_user()) %>% 
-  #filter(reply_to_screen_name == handle) %>% 
+  filter(reply_to_screen_name == handle) %>% 
   arrange(created_at)
 
 trump_df <- read_csv("./data/trump_df.csv") %>%
@@ -28,14 +28,14 @@ trump_df <- read_csv("./data/trump_df.csv") %>%
 
 # if my replies are all before the last non-retweet entry from handle, then I need to
 # reply. If not, then I can sleep and wait for a new tweet.
-my_last_reply_timestamp <- my_replies %>% top_n(n=1, wt = created_at) %>% pull(created_at)
+my_last_reply_timestamp <- my_replies %>% top_n(n=1, wt = as.numeric(status_id)) %>% pull(created_at)
 
 the_unreplied_tweets <- trump_df %>% filter(!is_retweet) %>%
   filter(created_at > my_last_reply_timestamp) %>% 
   arrange(created_at)
 
 if(nrow(the_unreplied_tweets) > 0) {
-  reply_to_status_id <- the_unreplied_tweets %>% top_n(n=1, wt = created_at) %>% pull(status_id)
+  reply_to_status_id <- trump_df %>% top_n(n=1, wt = as.numeric(status_id)) %>% pull(status_id)
   
   num_reply_chars <- 0
   n_tweets <- 1
@@ -69,7 +69,8 @@ if(nrow(the_unreplied_tweets) > 0) {
     the_reply <- paste(tweet_prefix, the_reply)
     
     post_tweet(status = the_reply, 
-               in_reply_to_status_id = as.numeric(reply_to_status_id))
+               in_reply_to_status_id = reply_to_status_id,
+               auto_populate_reply_metadata = TRUE)
   } 
   
 }
