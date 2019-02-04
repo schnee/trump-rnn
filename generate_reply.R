@@ -22,9 +22,11 @@ my_replies <- get_timeline(rtweet:::home_user()) %>%
   filter(reply_to_screen_name == handle) %>% 
   arrange(created_at)
 
-trump_df <- read_csv("./data/trump_df.csv") %>%
-  mutate(status_id = as.character(status_id)) %>%
-  mutate(reply_to_user_id = as.character(reply_to_user_id))
+trump_df <- read_csv(
+  "./data/trump_df.csv",
+  col_types = cols(status_id = col_character(),
+                   reply_to_user_id = col_character())
+)
 
 # if my replies are all before the last non-retweet entry from handle, then I need to
 # reply. If not, then I can sleep and wait for a new tweet.
@@ -32,10 +34,13 @@ my_last_reply_timestamp <- my_replies %>% top_n(n=1, wt = as.numeric(status_id))
 
 the_unreplied_tweets <- trump_df %>% filter(!is_retweet) %>%
   filter(created_at > my_last_reply_timestamp) %>% 
+  distinct(status_id, .keep_all=TRUE) %>%
   arrange(created_at)
 
 if(nrow(the_unreplied_tweets) > 0) {
-  reply_to_status_id <- trump_df %>% top_n(n=1, wt = as.numeric(status_id)) %>% pull(status_id)
+  reply_to_status_id <- the_unreplied_tweets %>% top_n(n=1, wt = as.numeric(status_id)) %>% pull(status_id)
+
+  print(paste0("Replying to: ", reply_to_status_id))
   
   num_reply_chars <- 0
   n_tweets <- 1

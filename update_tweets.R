@@ -15,19 +15,33 @@ if (file.exists(credsFile)) {
 
 token <- initialize_twitter(creds)
 
-trump_df <- read_csv("./data/trump_df.csv") %>%
-  mutate(status_id = as.character(status_id)) %>%
-  mutate(reply_to_user_id = as.character(reply_to_user_id))
+trump_df <- read_csv(
+  "./data/trump_df.csv",
+  col_types = cols(status_id = col_character(),
+                   reply_to_user_id = col_character())
+)
 
-most_recent = trump_df %>% arrange(created_at) %>% pull(status_id) %>% last()
+most_recent = trump_df %>% 
+  arrange(as.numeric(status_id), created_at) %>% 
+  pull(status_id) %>% last()
 
 timeline <-
   get_timeline(user = handle, n = 3200, since_id = most_recent)
 
+print(paste("New tweets:", nrow(timeline)))
+
 if (nrow(timeline) > 0) {
+  
+  print(paste("New tweets:", nrow(timeline)))
+  
+  
   trump_df <- trump_df %>%
     bind_rows(timeline %>% select(colnames(trump_df))) %>%
-    distinct(status_id, .keep_all = TRUE)
+    distinct(status_id, .keep_all = TRUE) %>%
+    arrange(as.numeric(status_id), created_at)
+  
+  write_csv(trump_df, "./data/trump_df.csv")
+  
 }
 
-write_csv(trump_df, "./data/trump_df.csv")
+
