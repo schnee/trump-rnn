@@ -56,7 +56,6 @@ if(nrow(the_unreplied_tweets) > 0) {
   }
   
   if (num_reply_chars >= max_length) {
-    tweet_prefix <- paste0(".@", handle, " :")
     
     model <- load_model_hdf5("./trumprnn.h5")
     alphabet <- readRDS(file = "./alphabet.RDS")
@@ -67,11 +66,9 @@ if(nrow(the_unreplied_tweets) > 0) {
       seedtext = reply_chars,
       chars = alphabet,
       max_length = get_max_length(),
-      output_size = 230 - nchar(tweet_prefix),
+      output_size = 230,
       diversity = 0.4
     )
-    
-    the_reply <- paste(tweet_prefix, the_reply)
     
     post_tweet(status = the_reply, 
                in_reply_to_status_id = reply_to_status_id,
