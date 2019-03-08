@@ -74,7 +74,7 @@ if(nrow(the_unreplied_tweets) > 0) {
     )
     
     post_tweet(status = the_reply, 
-               in_reply_to_status_id = reply_to_status_id,
+               in_reply_to_status_id = reply_to_tweet$status_id,
                auto_populate_reply_metadata = TRUE)
     
     print(paste("Replied with:", the_reply))
