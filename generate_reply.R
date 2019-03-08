@@ -28,25 +28,28 @@ trump_df <- read_csv(
                    reply_to_user_id = col_character())
 )
 
-# if my replies are all before the last non-retweet entry from handle, then I need to
-# reply. If not, then I can sleep and wait for a new tweet.
-my_last_reply_timestamp <- my_replies %>% top_n(n=1, wt = as.numeric(status_id)) %>% pull(created_at)
+# look at the last days worth of tweets, and remove those that I have already replied to
 
-the_unreplied_tweets <- trump_df %>% filter(!is_retweet) %>%
-  filter(created_at > my_last_reply_timestamp) %>% 
+the_unreplied_tweets <- trump_df %>% 
+  filter(!is_retweet) %>% filter(created_at > today() - days(1)) %>% 
+  anti_join(my_replies, by = c("status_id" = "reply_to_status_id")) %>% 
   distinct(status_id, .keep_all=TRUE) %>%
   arrange(created_at)
 
 if(nrow(the_unreplied_tweets) > 0) {
-  reply_to_status_id <- the_unreplied_tweets %>% top_n(n=1, wt = as.numeric(status_id)) %>% pull(status_id)
+  reply_to_tweet <- the_unreplied_tweets %>% 
+    sample_n(1) 
 
-  print(paste0("Replying to: ", reply_to_status_id))
+  print(paste0("Replying to: ", reply_to_tweet$status_id, " ", reply_to_tweet$text))
   
   num_reply_chars <- 0
   n_tweets <- 1
   
+  # generate seed chars
   while (((num_reply_chars < max_length) && n_tweets <= 10)) {
-    reply_to_txt <- trump_df %>% top_n(n = n_tweets, wt = created_at)
+    reply_to_txt <- trump_df %>% 
+      filter(!is_retweet) %>%
+      top_n(n = n_tweets, wt = created_at)
     
     reply_chars <- reply_to_txt %>% clean_and_tokenize()
     
@@ -73,6 +76,8 @@ if(nrow(the_unreplied_tweets) > 0) {
     post_tweet(status = the_reply, 
                in_reply_to_status_id = reply_to_status_id,
                auto_populate_reply_metadata = TRUE)
+    
+    print(paste("Replied with:", the_reply))
   } 
   
 }
