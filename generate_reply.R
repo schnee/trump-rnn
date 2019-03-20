@@ -37,12 +37,29 @@ the_unreplied_tweets <- trump_df %>%
   arrange(created_at)
 
 if(nrow(the_unreplied_tweets) > 0) {
+  
   reply_to_tweet <- the_unreplied_tweets %>% 
     sample_n(1) 
-
-  print(paste0("Replying to: ", reply_to_tweet$status_id, " ", reply_to_tweet$text))
   
-  num_reply_chars <- 0
+
+  n_chars_in_tweet <- reply_to_tweet %>% clean_and_tokenize() %>% length()
+  n_attempts <- 0
+  
+  while ((n_attempts < 10) && (n_chars_in_tweet < 2)) {
+    reply_to_tweet <- the_unreplied_tweets %>% 
+      sample_n(1) 
+    
+    
+    n_chars_in_tweet <- reply_to_tweet %>% clean_and_tokenize() %>% length()
+    n_attempts <- n_attempts + 1
+  }
+  
+
+  
+  num_reply_chars <- n_chars_in_tweet
+
+  
+  reply_chars <- reply_to_tweet %>% clean_and_tokenize()
   n_tweets <- 1
   
   # generate seed chars
@@ -51,7 +68,7 @@ if(nrow(the_unreplied_tweets) > 0) {
       filter(!is_retweet) %>%
       top_n(n = n_tweets, wt = created_at)
     
-    reply_chars <- reply_to_txt %>% clean_and_tokenize()
+    reply_chars <- c(reply_chars, reply_to_txt %>% clean_and_tokenize())
     
     num_reply_chars <- length(reply_chars)
     n_tweets <- n_tweets + 1
@@ -76,6 +93,8 @@ if(nrow(the_unreplied_tweets) > 0) {
     post_tweet(status = the_reply, 
                in_reply_to_status_id = reply_to_tweet$status_id,
                auto_populate_reply_metadata = TRUE)
+    
+    print(paste0("Replying to: ", reply_to_tweet$status_id, " ", reply_to_tweet$text))
     
     print(paste("Replied with:", the_reply))
   } 
