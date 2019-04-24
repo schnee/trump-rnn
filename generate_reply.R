@@ -90,6 +90,9 @@ if(nrow(the_unreplied_tweets) > 0) {
       diversity = 0.4
     )
     
+    # make the status appear to be part of a whole to mask the start/stop
+    the_reply <- paste0("...", the_reply, "...")
+    
     post_tweet(status = the_reply, 
                in_reply_to_status_id = reply_to_tweet$status_id,
                auto_populate_reply_metadata = TRUE)
